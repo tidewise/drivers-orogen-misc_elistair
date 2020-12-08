@@ -6,6 +6,8 @@
 #include "misc_elistair/TaskBase.hpp"
 
 namespace misc_elistair {
+    class Driver;
+
     /*! \class Task
      * \brief Declare a new task context (i.e., a component)
      *
@@ -21,6 +23,8 @@ namespace misc_elistair {
         friend class TaskBase;
 
     protected:
+        std::unique_ptr<Driver> m_driver;
+        void processIO();
 
     public:
         /** TaskContext constructor for Task
