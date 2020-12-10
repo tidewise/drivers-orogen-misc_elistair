@@ -12,5 +12,5 @@ task_context "Task", subclasses: "iodrivers_base::Task" do
     input_port "cmd", "/misc_elistair/Command"
     output_port "status", "/misc_elistair/Status"
 
-    periodic 0.1
+    periodic 0.25
 end

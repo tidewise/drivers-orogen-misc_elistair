@@ -53,21 +53,29 @@ bool Task::startHook()
     return true;
 }
 void Task::processIO() {
+    try {
+        Status status = m_driver->read();
+        _status.write(status);
+    }
+    catch(iodrivers_base::TimeoutError&) {
+    }
 }
 void Task::updateHook()
 {
     TaskBase::updateHook();
 
     Command cmd;
-    if (_cmd.read(cmd) != RTT::NoData) {
-        m_driver->sendCommand(
-            cmd.power_mode,
-            cmd.torque_mode,
-            cmd.torque
-        );
-        Status status = m_driver->read();
-        _status.write(status);
+    if (_cmd.read(cmd) == RTT::NoData) {
+        cmd.power_mode = POWER_OFF;
+        cmd.torque_mode = TORQUE_SOFTWARE;
+        cmd.torque = 0;
     }
+
+    m_driver->sendCommand(
+        cmd.power_mode,
+        cmd.torque_mode,
+        cmd.torque
+    );
 }
 void Task::errorHook()
 {
